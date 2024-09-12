@@ -20,51 +20,60 @@ for i in range(4):
     img = escalar_img(img, constantes.SCALA_PERSONAJE)
     animaciones.append(img)
 
-#Fondo del videojuego.
+# Fondo del videojuego
 Fondo = pygame.image.load("Fondo.jpg").convert()
 
-#Imagen del personaje
-Player_image = pygame.image.load("assets\\images\\characters\\player\\Player_0.png")
-Player_image = escalar_img(Player_image, constantes.SCALA_PERSONAJE)
+jugador = Personaje(50, 330, animaciones)
 
-jugador = Personaje(50, 50, animaciones)
-
-#definir las variables de movimiento del jugador.
+# Definir las variables de movimiento del jugador
 mover_arriba = False
 mover_abajo = False
 mover_izquierda = False
 mover_derecha = False
 
-#Controlar los frame rate
+# Controlar el frame rate
 reloj = pygame.time.Clock()
 
 run = True
-while run == True:
-    
-    #controlar los fps
+
+while run:
+    # Controlar los fps
     reloj.tick(constantes.FPS)
-    
+
+    # Redibujar el fondo para limpiar la pantalla
     ventana.blit(Fondo, [0, 0])
-    
-    #Calcular el movimiento del jugador
+
+    # Calcular el movimiento del jugador
     delta_x = 0
     delta_y = 0
     
-    if mover_derecha == True:
+    if mover_derecha:
         delta_x = constantes.VELOCIDAD
-    if mover_izquierda == True:
+    if mover_izquierda:
         delta_x = -constantes.VELOCIDAD
-    if mover_abajo == True:
-        delta_y = constantes.VELOCIDAD
-    if mover_arriba == True:
+    if mover_arriba:
         delta_y = -constantes.VELOCIDAD
+    if mover_abajo:
+        delta_y = constantes.VELOCIDAD
 
+    # Eventos de entrada del teclado
     for event in pygame.event.get():
-        #para cerrar el juego
+        # Para cerrar el juego
         if event.type == pygame.QUIT:
             run = False
         
         if event.type == pygame.KEYDOWN:
+            # Flechas del teclado
+            if event.key == pygame.K_LEFT:
+                mover_izquierda = True
+            if event.key == pygame.K_RIGHT:
+                mover_derecha = True
+            if event.key == pygame.K_UP:
+                mover_arriba = True
+            if event.key == pygame.K_DOWN:
+                mover_abajo = True
+            
+            # Teclas WASD
             if event.key == pygame.K_a:
                 mover_izquierda = True
             if event.key == pygame.K_d:
@@ -73,11 +82,20 @@ while run == True:
                 mover_arriba = True
             if event.key == pygame.K_s:
                 mover_abajo = True
-            if event.key == pygame.KSCAN_LEFT:
-                mover_izquierda = True
                 
-        #Cuando se suelte la tecla
+        # Cuando se suelte la tecla
         if event.type == pygame.KEYUP:
+            # Flechas del teclado
+            if event.key == pygame.K_LEFT:
+                mover_izquierda = False
+            if event.key == pygame.K_RIGHT:
+                mover_derecha = False
+            if event.key == pygame.K_UP:
+                mover_arriba = False
+            if event.key == pygame.K_DOWN:
+                mover_abajo = False
+
+            # Teclas WASD
             if event.key == pygame.K_a:
                 mover_izquierda = False
             if event.key == pygame.K_d:
@@ -86,14 +104,17 @@ while run == True:
                 mover_arriba = False
             if event.key == pygame.K_s:
                 mover_abajo = False
-                
-        #Mover al jugador
-        jugador.movimiento(delta_x, delta_y)
-        
-        jugador.update()
-        
-        jugador.dibujar(ventana)
+    
+    # Mover al jugador
+    jugador.movimiento(delta_x, delta_y)
+    
+    # Actualizar la animación del jugador
+    jugador.update()
+    
+    # Dibujar al jugador
+    jugador.dibujar(ventana)
 
+    # Actualizar la pantalla
     pygame.display.update()
 
 pygame.quit()

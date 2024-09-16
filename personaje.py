@@ -8,7 +8,7 @@ class Personaje():
         self.frame_index = 0
         self.image = animaciones[self.frame_index]
         self.update_time = pygame.time.get_ticks()
-        self.forma = pygame.Rect(0, 0, constantes.ANCHO_PERSONAJE, constantes.ALTO_PERSONAJE)
+        self.forma = self.image.get_rect()
         self.forma.center = (x, y)
         self.moviendo = False  # Nueva variable para controlar si está en movimiento
 
